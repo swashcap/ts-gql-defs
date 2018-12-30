@@ -1,0 +1,8 @@
+{
+  "name": "ts-gql-defs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:swashcap/ts-gql-defs.git",
+  "author": "Cory Reed <swashcap@gmail.com>",
+  "license": "Apache-2.0"
+}
