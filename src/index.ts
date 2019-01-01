@@ -6,8 +6,19 @@ const port = process.env.PORT || 4000
 
 const resolvers = {
   Query: {
-    books() {
-      return []
+    books(): GQL.IBook[] {
+      return [
+        {
+          __typename: 'Book',
+          author: 'John Steinbeck',
+          title: 'Grapes Of Wrath',
+        },
+        {
+          __typename: 'Book',
+          author: 'John Steinbeck',
+          title: 'Of Mice and Men',
+        },
+      ]
     },
   },
 }
