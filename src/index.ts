@@ -77,11 +77,15 @@ const server = new ApolloServer({
    * {@link https://www.apollographql.com/docs/apollo-server/features/metrics.html#High-Level-Logging}
    */
   formatError(error: any) {
-    console.error(error)
+    if (process.env.NODE_ENV !== 'test') {
+      console.error(error)
+    }
     return error
   },
   formatResponse(response: any) {
-    console.log(response.data)
+    if (process.env.NODE_ENV !== 'test') {
+      console.log(response.data)
+    }
     return response
   },
   resolvers,
