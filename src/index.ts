@@ -89,12 +89,16 @@ const server = new ApolloServer({
   typeDefs,
 })
 
-server
-  .listen({ port })
-  .then(({ url }) => {
-    console.log(`Server listening at ${url}`)
-  })
-  .catch(error => {
-    console.error(error)
-    process.exit(1)
-  })
+if (!module.parent) {
+  server
+    .listen({ port })
+    .then(({ url }) => {
+      console.log(`Server listening at ${url}`)
+    })
+    .catch(error => {
+      console.error(error)
+      process.exit(1)
+    })
+}
+
+export default server
