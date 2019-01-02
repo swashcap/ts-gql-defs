@@ -1,24 +1,68 @@
-import { ApolloServer, gql } from 'apollo-server'
+import { ApolloServer, gql, IResolvers } from 'apollo-server'
 import fs from 'fs'
 import path from 'path'
 
 const port = process.env.PORT || 4000
 
-const resolvers = {
+// Overwrite a property's type
+// https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-378367303
+type Overwrite<T, K extends keyof T, R> = Pick<T, Exclude<keyof T, K>> &
+  { [P in K]: R }
+
+type IAuthorRef = Overwrite<GQL.IAuthor, 'books', number[]>
+type IBookRef = Overwrite<GQL.IBook, 'author', number>
+
+const authors: Record<number, IAuthorRef> = {
+  1: {
+    __typename: 'Author',
+    books: [3, 4],
+    id: '1',
+    name: 'John Steinbeck',
+  },
+  2: {
+    __typename: 'Author',
+    books: [5],
+    id: '2',
+    name: 'Charles Darwin',
+  },
+}
+
+const books: Record<number, IBookRef> = {
+  3: {
+    __typename: 'Book',
+    author: 1,
+    id: '3',
+    title: 'Grapes Of Wrath',
+  },
+  4: {
+    __typename: 'Book',
+    author: 1,
+    id: '4',
+    title: 'Of Mice and Men',
+  },
+  5: {
+    __typename: 'Book',
+    author: 2,
+    id: '5',
+    title: 'Origin Of Species',
+  },
+}
+
+const resolvers: IResolvers = {
+  Book: {
+    /**
+     * Use Apollo's nested object resolver to look up author
+     * {@link https://www.apollographql.com/docs/graphql-tools/resolvers.html}
+     */
+    author({ author: authorId }: IBookRef) {
+      if (authorId in authors) {
+        return authors[authorId]
+      }
+    },
+  },
   Query: {
-    books(): GQL.IBook[] {
-      return [
-        {
-          __typename: 'Book',
-          author: 'John Steinbeck',
-          title: 'Grapes Of Wrath',
-        },
-        {
-          __typename: 'Book',
-          author: 'John Steinbeck',
-          title: 'Of Mice and Men',
-        },
-      ]
+    books() {
+      return Object.values(books)
     },
   },
 }

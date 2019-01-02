@@ -22,13 +22,21 @@ declare namespace GQL {
 
   interface IQuery {
     __typename: 'Query'
-    books: Array<IBook | null> | null
+    books: Array<IBook | null>
   }
 
   interface IBook {
     __typename: 'Book'
-    title: string | null
-    author: string | null
+    author: IAuthor
+    id: string
+    title: string
+  }
+
+  interface IAuthor {
+    __typename: 'Author'
+    books: Array<IBook | null>
+    id: string
+    name: string
   }
 }
 
