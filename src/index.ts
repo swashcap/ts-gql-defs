@@ -85,6 +85,7 @@ const server = new ApolloServer({
     return response
   },
   resolvers,
+  tracing: process.env.NODE_ENV !== 'production',
   typeDefs,
 })
 
